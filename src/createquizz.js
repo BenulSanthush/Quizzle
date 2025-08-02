@@ -25,7 +25,7 @@ export default function CreateQuiz() {
     try {
       const docRef = await addDoc(collection(db, "quizzes"), {
         questions,
-        createdBy: auth.currentUser.uid,
+        /*createdBy: auth.currentUser.uid,*/
         createdAt: serverTimestamp(),
       });
       setQuizId(docRef.id);

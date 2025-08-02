@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import HomePage from "./homepage";
 import AnswerPage from "./answerpage";
 import ViewPage from "./ViewPage.js";
@@ -9,7 +10,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Quizzle">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<CreateQuiz />} />
@@ -19,5 +20,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
