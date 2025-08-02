@@ -15,4 +15,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+signInAnonymously(auth).catch(console.error);
 export const db = getFirestore(app);
