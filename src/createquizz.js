@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "./firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function CreateQuiz() {
+  const [ready, setReady] = useState(false);
   const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
   const [quizId, setQuizId] = useState("");
+
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, () => {
+      setReady(true);
+      unsubscribe();
+    });
+  }, []);
+
+ 
+  if (!ready) return <div>Loading…</div>;
 
   const handleAdd = () => {
     if (!question.trim()) return;
@@ -25,7 +39,6 @@ export default function CreateQuiz() {
     try {
       const docRef = await addDoc(collection(db, "quizzes"), {
         questions,
-        
         createdBy: auth.currentUser?.uid || "anonymous",
         createdAt: serverTimestamp(),
       });
@@ -48,43 +61,42 @@ export default function CreateQuiz() {
           placeholder="Type a question"
           style={{ flex: 1 }}
         />
-        
         <button onClick={handleAdd} className="button-add">➕</button>
-
       </div>
-<div className="question-list-container">
- <ul style={{ listStyleType: "none", padding: 0, width: "100%" }}>
-  {questions.map((q, i) => (
-    <li
-      key={i}
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 15px",
-        borderBottom: "1px solid #ccc",
-        margin: "5px 0",
-        backgroundColor: "#f9f9f9",
-        borderRadius: "6px",
-      }}
-    >
-      <span>{i + 1}. {q}</span>
-     <button onClick={() => handleRemove(i)} className="button-delete">❌</button>
 
-    </li>
-  ))}
-</ul>
-</div>
+      <div className="question-list-container">
+        <ul style={{ listStyleType: "none", padding: 0, width: "100%" }}>
+          {questions.map((q, i) => (
+            <li
+              key={i}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "10px 15px",
+                borderBottom: "1px solid #ccc",
+                margin: "5px 0",
+                backgroundColor: "#f9f9f9",
+                borderRadius: "6px",
+              }}
+            >
+              <span>{i + 1}. {q}</span>
+              <button
+                onClick={() => handleRemove(i)}
+                className="button-delete"
+              >
+                ❌
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {questions.length > 0 && (
-  <>
-    
-    <button onClick={handleSubmit} className="button-submit">Submit Quiz</button>
-  </>
-)}
-
-
-     
+        <button onClick={handleSubmit} className="button-submit">
+          Submit Quiz
+        </button>
+      )}
 
       {quizId && (
         <div style={{ marginTop: "20px" }}>
