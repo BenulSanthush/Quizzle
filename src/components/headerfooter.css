@@ -1,0 +1,20 @@
+.header {
+ 
+  top: 0;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: bold;
+  z-index: 1000;
+  border-bottom: 1px solid #ccc;
+}
+
+.footer {
+
+  bottom: 0;
+  background-color: #f8f8f8;
+  padding: 10px 20px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+}
+
